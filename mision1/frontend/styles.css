@@ -3,3 +3,13 @@ body{
  
 .estilo_h1{color: #82c9e9;}
 .estilo_h1_v2{color: #71c261;}
+
+
+
+.mi_imagen{border-radius: 12px; 
+    box-shadow: o 6px rgba,(0,0,0,0);
+    width: 200px;
+    height: 300px;
+    
+}
+
