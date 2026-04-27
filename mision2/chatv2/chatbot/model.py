@@ -1,9 +1,9 @@
-import os # trabaja con el sistema operativo
-import pickle # guarda y carga objetos de python en archivos
-from sklearn.feature_extraction.tex import countVectorizar
-# counVectorizar convierte texto en un vector
+import os #trabaja con el sistema operativo
+import pickle #guarda y carga objetos de Python en archivos 
+from sklearn.feature_extraction.text import CountVectorizer
+# CountVectorizer convierte texto en un vector
 from sklearn.naive_bayes import MultinomialNB
-MODEL_DIR = "models"
+MODEL_DIR = "Models"
 MODEL_PATH = os.path.join(MODEL_DIR, "chatbot_model.pkl")
 VECTORIZER_PATH = os.path.join(MODEL_DIR, "vectorizer.pkl")
 ANSWERS_PATH = os.path.join(MODEL_DIR, "answers.pkl")
@@ -16,20 +16,20 @@ def buid_and_train_model(train_pairs):
     unique_answers = sorted(set(answers))
     answer_to_label ={a: i for i, a in enumerate(unique_answers)}
     y = [answer_to_label[a] for a in answers]
-    Model = MultinomialNB()
-    model. fit(x,y)
+    model = MultinomialNB()
+    model.fit(x, y)
     #crear carpeta para guardar el modelo si no existe
-    os.makedirs(MODEL_DIR,existe_ok=true)
-    #Guardar los oobjetos entrenados
-    wit open( MODEL_PATH,"wb") as f:
-       pickle.dump(model,f)
+    os.makedirs(MODEL_DIR, exist_ok=True)
+    #guardar los objetos entrenados 
+    with open(MODEL_PATH, "wb") as f:
+        pickle.dump(model, f)
     with open(VECTORIZER_PATH, "wb") as f:
         pickle.dump(vectorizer, f)
     with open(ANSWERS_PATH, "wb") as f:
         pickle.dump(unique_answers, f)
-        print("🆗 modelo entrenado y guardado correctamente")
-        return model, vectorizer,unique_answers
-    
+    print("🆗 Modelo entrenado y guardado exitosamentecorrectamente.")
+    return model, vectorizer, unique_answers
+
 def load_model():
     if(
         os.path.exists(MODEL_PATH)  
@@ -45,7 +45,11 @@ def load_model():
         print("📁 Modelo cargado desde disco.")
         return model, vectorizer, unique_answers
     else:
-        print("⚠️ no hay modelo guardado.sera necesario encontrarlo")
-        return None,None,None
-     
-          
+        print("⚠️ No hay un modelo guardado.sera nesesario encontrarlo ")
+        return None, None, None
+    
+
+def predict_answer(model, vectorizer, unique_answers, user_text):
+    x = vectorizer.transform([user_text])
+    label = model.predict(x)[0]
+    return unique_answers[label]
